@@ -24,18 +24,6 @@ variable "sku_name" {
  
 }
 
-variable "sku_capacity" {
- 
-}
-
-variable "sku_tier" {
- 
-}
-
-variable "sku_family" {
- 
-}
-
 variable "storage_mb" {
  
 }
@@ -65,5 +53,17 @@ variable "ssl_enforcement" {
 }
 
 variable "networkrule_name" {
+ 
+}
+
+variable "private_start_ip_address" {
+ 
+}
+
+variable "private_end_ip_address" {
+ 
+}
+
+variable "subnet_id" {
  
 }
