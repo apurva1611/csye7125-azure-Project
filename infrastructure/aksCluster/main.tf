@@ -14,13 +14,19 @@ terraform {
   }
 }
 
-# resource "azurerm_virtual_network" "vnet" {
-#     name                        = "vnet"
-#     location                    = var.location
-#     resource_group_name         = var.resource_group_name
-#     address_space               = [var.ipspace]
-#     # tags                        = var.default_tags
-# }
+resource "azurerm_virtual_network" "azure_aks_vnet" {
+  name                = "azure_aks_vnet"
+  address_space       = ["10.0.0.0/8"]
+  location            = var.location
+  resource_group_name = var.resource_group_name
+}
+
+resource "azurerm_subnet" "azure_aks_subnet" {
+  name                 = "azure-aks-subnet"
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.azure_aks_vnet.name
+  address_prefixes     = ["10.240.0.0/16"]
+}
 
 ## AKS kubernetes cluster ##
 resource "azurerm_kubernetes_cluster" "aks_csye7125_cluster" { 
@@ -30,7 +36,7 @@ resource "azurerm_kubernetes_cluster" "aks_csye7125_cluster" {
   dns_prefix          = var.dns_prefix
   node_resource_group = var.node_resource_group_name
   kubernetes_version  = var.k8s_version
-
+  private_cluster_enabled = false
   linux_profile {
     admin_username = var.admin_username
 
@@ -41,11 +47,11 @@ resource "azurerm_kubernetes_cluster" "aks_csye7125_cluster" {
   }
 
   default_node_pool {
-    name       = "default"
-    node_count = var.agent_count
-    vm_size    = var.vm_size
-    # os_disk_size_gb = var.os_disk_size_gb
-    # vnet_subnet_id  = azurerm_subnet.akspodssubnet.id
+    name                  = "default"
+    node_count            = var.agent_count
+    vm_size               = var.vm_size
+    enable_node_public_ip = false
+    vnet_subnet_id        = azurerm_subnet.azure_aks_subnet.id
   }
 
 #   dynamic service_principal {
@@ -56,39 +62,44 @@ resource "azurerm_kubernetes_cluster" "aks_csye7125_cluster" {
 #     }
 #   }
 
-#   dynamic identity {
-#     for_each = var.client_id == "" || var.client_secret == "" ? ["identity"] : []
-#     content {
-#       type = "SystemAssigned"
-#     }
-#   }
-
   addon_profile {
-    
-    kube_dashboard { 
-          enabled = true 
+    aci_connector_linux {
+      enabled = false
     }
 
-    # http_application_routing {
-    #   enabled = var.enable_http_application_routing
-    # }
+    azure_policy {
+      enabled = false
+    }
 
-    # dynamic azure_policy {
-    #   for_each = var.enable_azure_policy ? ["azure_policy"] : []
-    #   content {
-    #     enabled = true
-    #   }
-    # }
+    http_application_routing {
+      enabled = false
+    }
+
+    kube_dashboard {
+      enabled = true
+    }
+
+    oms_agent {
+      enabled = false
+    }
   }
 
   identity {
     type = "SystemAssigned"
   }
 
-  tags = {
-    Environment = "production"
-  }
+  # tags = {
+  #   Environment = "production"
+  # }
 }
+
+# resource "azurerm_kubernetes_cluster_node_pool" "aks_node_pool" {
+#   name                  = "internal"
+#   kubernetes_cluster_id = azurerm_kubernetes_cluster.aks_csye7125_cluster.id
+#   vm_size               = "Standard_DS2_v2"
+#   node_count            = 1
+#   vnet_subnet_id        = azurerm_subnet.azure_aks_subnet.id
+# }
 
 # Private key for the kubernetes cluster ##
 resource "tls_private_key" "key" {
@@ -110,35 +121,18 @@ resource "null_resource" "save-key" {
       chmod 0600 ${path.module}/.ssh/myKeyPair
 EOF
   }
-  # provisioner "local-exec" {
-  #   when = "destroy"
-  #   command = "rm ./data/ssh/myKeyPair"
-  # }
 }
 
-## Outputs ##
+# ## Outputs ##
 
-# Example attributes available for output
-# output "vnet_id" {
-#     value = azurerm_virtual_network.vnet.id
-# }
+# # Example attributes available for output
+output "vnet_id" {
+    value = azurerm_virtual_network.azure_aks_vnet.id
+}
 
-# data "azurerm_subnet" "test" {
-#     name                 = "${data.azurerm_virtual_network.vnet.subnets[count.index]}"
-#     virtual_network_name = "${data.azurerm_virtual_network.vnet.name}"
-#     resource_group_name  = "${data.azurerm_virtual_network.vnet.resource_group_name"
-#     count = "${count(data.azurerm_virtual_network.vnet.subnets)}"
-# }
-# data "azurerm_subnet" "vnet_subnet" {
-#   name                 = "vnet_subnet"
-#   virtual_network_name = azurerm_virtual_network.vnet.name
-#   resource_group_name  = var.resource_group_name
-#   count = count(data.azurerm_virtual_network.vnet.subnets)
-# }
-
-# output "subnet_id" {
-#   value = data.azurerm_subnet.vnet_subnet.id
-# }
+output "subnet_id" {
+  value = azurerm_subnet.azure_aks_subnet.id
+}
 
 output "id" {
     value = azurerm_kubernetes_cluster.aks_csye7125_cluster.id
