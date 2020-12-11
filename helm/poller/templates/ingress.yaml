@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: poller-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    kubernetes.io/tls-acme: "true"
+spec:
+  rules:
+  # - host: app.prod.achirashah.com
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          serviceName: poller
+          servicePort: 8080
