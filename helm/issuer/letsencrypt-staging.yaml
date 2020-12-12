@@ -6,7 +6,7 @@ metadata:
   name: letsencrypt-az
 spec:
  acme:
-  email: shah.ac@northeastern.com
+  email: mathur.ap@northeastern.edu
   privateKeySecretRef:
     name: letsencrypt-privatekey
   server: https://acme-v02.api.letsencrypt.org/directory

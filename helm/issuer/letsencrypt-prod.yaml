@@ -7,7 +7,7 @@ metadata:
   namespace: cert-manager
 spec:
   acme:
-    email: shah.ac@northeastern.edu
+    email: mathur.ap@northeastern.edu
     privateKeySecretRef:
       name: letsencrypt-prod
     server: https://acme-v02.api.letsencrypt.org/directory

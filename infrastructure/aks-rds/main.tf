@@ -8,7 +8,7 @@ provider "azurerm" {
 terraform {
   backend "azurerm" {
     resource_group_name   = "aks-csye7125-rg"
-    storage_account_name  = "tfstatesecsyeproject"
+    storage_account_name  = "tfstatesecsyeprojectterm"
     container_name        = "tfstates"
     key                   = "rds-cluster/tfstate"
   }

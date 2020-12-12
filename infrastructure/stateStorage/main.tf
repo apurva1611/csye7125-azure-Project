@@ -8,14 +8,14 @@ provider "azurerm" {
 # terraform {
 #   backend "azurerm" {
 #     resource_group_name   = "aks-csye7125-rg"
-#     storage_account_name  = "tfstatesecsyeproject"
+#     storage_account_name  = "tfstatesecsyeprojectterm"
 #     container_name        = "tfstates"
 #     key                   = "storage/tfstate"
 #   }
 # }
 
 resource "azurerm_storage_account" "terraform_backend_storage" {
-  name                      = "tfstatesecsyeproject"
+  name                      = "tfstatesecsyeprojectterm"
   resource_group_name       = var.resource_group_name
   location                  = var.location
   account_tier              = "Standard"
