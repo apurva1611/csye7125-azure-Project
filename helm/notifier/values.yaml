@@ -72,10 +72,10 @@ secret:
     name: rdscred
     type: Opaque
     username: root
-    password: pass1234 
+    password: Pass1234 
 
 ingress:
-  enabled: true
+  enabled: false
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
