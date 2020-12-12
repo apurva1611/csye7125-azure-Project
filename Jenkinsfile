@@ -134,6 +134,7 @@ node {
             helmDryrunAppPrereq ()
             helmDryrunElasticSearch ()
             helmDryrunAppNginx ()
+            addJetstackRepo()
             helmDryrunCertManager ()
             helmDryrunWebapp ()
             helmDryrunPoller ()
