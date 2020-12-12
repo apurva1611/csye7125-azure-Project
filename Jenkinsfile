@@ -12,9 +12,6 @@ node {
         /* Cloning the Repository to our Workspace */
         checkout scm
         
-
-         sh "az aks show --resource-group aks-csye7125-rg  --name azureCsyeCluster  --query fqdn"
-         sh "az aks get-credentials --resource-group aks-csye7125-rg  --name azureCsyeCluster"
          sh "kubectl get nodes"
         // sh "export aws_profile=${env.aws_profile}"
         // sh "export aws_region=${env.aws_region}"
