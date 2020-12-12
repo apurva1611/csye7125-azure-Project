@@ -120,7 +120,7 @@ node {
             sh 'az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID'   
         }
         sh "az aks show --resource-group ${resourceGroupName}  --name ${clusterName}  --query fqdn"
-        //sh "az aks get-credentials --resource-group ${resourceGroupName}  --name ${clusterName}"
+        sh "az aks get-credentials --resource-group ${resourceGroupName}  --name ${clusterName} --overwrite-existing"
          sh "kubectl get nodes"
         // sh "export aws_profile=${env.aws_profile}"
         // sh "export aws_region=${env.aws_region}"
