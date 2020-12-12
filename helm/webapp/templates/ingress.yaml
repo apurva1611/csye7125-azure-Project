@@ -9,10 +9,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - az.achirashah.com
+      - app.prod.apurvamathur.me
       secretName: letsencrypt-secret
   rules:
-  - host: az.achirashah.com
+  - host: app.prod.apurvamathur.me
     http:
       paths:
       - path: /
