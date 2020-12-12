@@ -136,9 +136,9 @@ node {
             helmDryrunAppNginx ()
             addJetstackRepo()
             helmDryrunCertManager ()
-            helmDryrunWebapp ()
-            helmDryrunPoller ()
-            helmDryrunNotifier ()
+            // helmDryrunWebapp ()
+            // helmDryrunPoller ()
+            // helmDryrunNotifier ()
         }
 
         stage('create namespace') {
@@ -165,16 +165,16 @@ node {
             helmInstallCertManager ()
             issueIssuer ()
         }
-        stage('webapp deployment') {
-            extSvc ()
-            helmInstallWebapp()
-        }
-        stage('poller deployment') {
-            helmInstallPoller ()
-        }
-        stage('notifier deployment') {
-            helmInstallNotifier ()
-        }   
+        // stage('webapp deployment') {
+        //     extSvc ()
+        //     helmInstallWebapp()
+        // }
+        // stage('poller deployment') {
+        //     helmInstallPoller ()
+        // }
+        // stage('notifier deployment') {
+        //     helmInstallNotifier ()
+        // }   
     }
      catch (Exception err){
             err_msg = "Test had Exception(${err})"
