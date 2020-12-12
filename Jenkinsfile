@@ -175,5 +175,10 @@ node {
             helmInstallNotifier ()
         }   
     }
+     catch (Exception err){
+            err_msg = "Test had Exception(${err})"
+            currentBuild.result = 'FAILURE'
+            error "FAILED - Stopping build for Error(${err_msg})"
+    }
 
 }
