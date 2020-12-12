@@ -26,7 +26,7 @@ node {
 
     try {
         stage ('helm test') {
-                createNamespace (monitoring)
+                createNamespace ('monitoring')
             }
 
    
