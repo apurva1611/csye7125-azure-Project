@@ -53,7 +53,10 @@ resource "azurerm_kubernetes_cluster" "aks_csye7125_cluster" {
     node_count            = var.agent_count
     vm_size               = var.vm_size
     enable_node_public_ip = false
-    vnet_subnet_id        = azurerm_subnet.azure_aks_subnet.id
+    enable_auto_scaling = true
+    max_count = 5
+    min_count=1
+    vnet_subnet_id = azurerm_subnet.azure_aks_subnet.id
   }
 
   addon_profile {
